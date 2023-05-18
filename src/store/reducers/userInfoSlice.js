@@ -27,9 +27,6 @@ export const userInfoSlice = createSlice({
         increaseIdValue:(state) => {
             state.id++;
         },
-        updateCounterValue:(state,action) => {
-            state.id=action.payload;
-        },
         handleExcessiveUser: (state, action)=>{
            
            const {users}= current(state); 
@@ -47,3 +44,11 @@ export const userInfoSlice = createSlice({
 export const {setUserInformation,addValue,handleExcessiveUser,increaseIdValue,updateCounterValue} = userInfoSlice.actions;
 
 export default userInfoSlice.reducer;
+
+
+
+
+//Un-used functions
+ // updateCounterValue:(state,action) => {
+        //     state.id=action.payload;
+        // },
