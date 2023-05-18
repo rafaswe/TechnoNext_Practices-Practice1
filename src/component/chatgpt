@@ -1,0 +1,75 @@
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addUser, deleteUser } from "./actions";
+
+const UserForm = () => {
+  const [username, setUsername] = useState("");
+  const [age, setAge] = useState("");
+
+  const dispatch = useDispatch();
+  const userList = useSelector((state) => state.userList);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (username && age) {
+      const newUser = {
+        userId: Date.now(), // Generating unique ID using timestamp (can be replaced with a more robust method)
+        userName: username,
+        userAge: parseInt(age),
+      };
+
+      if (userList.length >= 5) {
+        // Find user with the largest age
+        const userWithMaxAge = userList.reduce((prevUser, currentUser) =>
+          prevUser.userAge > currentUser.userAge ? prevUser : currentUser
+        );
+
+        // Delete user with the largest age
+        dispatch(deleteUser(userWithMaxAge.userId));
+      }
+
+      dispatch(addUser(newUser));
+
+      setUsername("");
+      setAge("");
+    }
+  };
+
+  return (
+    <div>
+      <h2>User Form</h2>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Username:
+          <input
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </label>
+        <br />
+        <label>
+          Age:
+          <input
+            type="number"
+            value={age}
+            onChange={(e) => setAge(e.target.value)}
+          />
+        </label>
+        <br />
+        <button type="submit">Submit</button>
+      </form>
+      <h3>User List</h3>
+      <ul>
+        {userList.map((user) => (
+          <li key={user.userId}>
+            User ID: {user.userId}, Username: {user.userName}, Age:{" "}
+            {user.userAge}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default UserForm;
